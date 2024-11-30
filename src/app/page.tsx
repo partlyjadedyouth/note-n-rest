@@ -4,12 +4,7 @@ import { useEffect, useState } from "react";
 import Calendar from "@/components/Calendar";
 import { useRouter } from "next/navigation";
 import { signOut } from "@/lib/auth";
-
-// 일기 엔트리 타입 정의
-interface DiaryEntry {
-  date: string;
-  id: string;
-}
+import { DiaryEntry } from "@/types";
 
 export default function HomePage() {
   const router = useRouter();
