@@ -43,7 +43,7 @@ export async function POST(request: NextRequest) {
       { status: 200 },
     );
 
-    response.cookies.set("auth", user.userId, {
+    response.cookies.set("session", user.userId, {
       httpOnly: true,
       secure: process.env.NODE_ENV === "production",
       sameSite: "strict",

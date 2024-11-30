@@ -5,7 +5,6 @@ export interface IUser {
   userId: string;
   password: string;
   name: string;
-  createdAt: Date;
 }
 
 // User 스키마 정의
@@ -16,8 +15,6 @@ const UserSchema = new mongoose.Schema<IUser>({
   password: { type: String, required: true },
   // 사용자 이름
   name: { type: String, required: true },
-  // 생성 일자
-  createdAt: { type: Date, default: Date.now },
 });
 
 // 모델이 이미 존재하는 경우 재사용, 없는 경우 새로 생성
