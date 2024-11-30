@@ -104,8 +104,7 @@ export default function Calendar({ entries, onDateClick }: CalendarProps) {
                 relative aspect-square flex flex-col items-center justify-center
                 rounded-lg transition-all duration-200 cursor-pointer
                 ${isCurrentMonth ? "hover:bg-[#FFFBEB]" : "text-gray-400"}
-                ${isToday ? "bg-[#FFE8A3]" : "bg-white"}
-                ${hasEntry ? "ring-2 ring-[#FFE8A3]" : ""}
+                ${isToday ? "ring-2 ring-[#FFE8A3]" : ""}
               `}
             >
               <span
