@@ -5,12 +5,12 @@ import { Diary } from "@/models/Diary";
 
 export async function GET(
   request: NextRequest,
-  { params }: { params: { date: string } },
+  context: { params: { date: string } },
 ) {
   try {
-    const { date } = params;
+    const params = await context.params;
+    const date = params.date;
 
-    // 세션에서 사용자 ID 확인
     const cookieStore = await cookies();
     const sessionUserId = cookieStore.get("session")?.value;
 
@@ -21,10 +21,8 @@ export async function GET(
       );
     }
 
-    // DB 연결
     await connectDB();
 
-    // 해당 날짜의 일기 조회
     const diary = await Diary.findOne({
       userId: sessionUserId,
       date: date,
@@ -46,12 +44,12 @@ export async function GET(
 
 export async function PUT(
   request: NextRequest,
-  { params }: { params: { date: string } },
+  context: { params: { date: string } },
 ) {
   try {
-    const { date } = params;
+    const params = await context.params;
+    const date = params.date;
 
-    // 세션에서 사용자 ID 확인
     const cookieStore = await cookies();
     const sessionUserId = cookieStore.get("session")?.value;
 
@@ -62,7 +60,6 @@ export async function PUT(
       );
     }
 
-    // 요청 본문 파싱
     const { content } = await request.json();
 
     if (!content) {
@@ -72,10 +69,8 @@ export async function PUT(
       );
     }
 
-    // DB 연결
     await connectDB();
 
-    // 해당 날짜의 일기 업데이트
     const updatedDiary = await Diary.findOneAndUpdate(
       {
         userId: sessionUserId,
