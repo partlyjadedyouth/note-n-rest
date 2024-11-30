@@ -2,12 +2,7 @@ import { NextResponse } from "next/server";
 import { connectDB } from "@/lib/mongodb";
 import { cookies } from "next/headers";
 import { Diary } from "@/models/Diary";
-
-// MongoDB 문서 타입 정의
-interface DiaryDocument {
-  _id: { toString(): string };
-  date: string;
-}
+import { DiaryDocument } from "@/types/diary";
 
 export async function GET() {
   try {
@@ -23,11 +18,10 @@ export async function GET() {
 
     await connectDB();
 
-    // 타입 지정
     const entries = (await Diary.find(
       { userId: sessionUserId },
       { date: 1, _id: 1 },
-    ).lean()) as unknown as DiaryDocument[];
+    ).lean()) as DiaryDocument[];
 
     const formattedEntries = entries.map((entry) => ({
       date: entry.date,

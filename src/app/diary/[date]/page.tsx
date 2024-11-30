@@ -3,17 +3,7 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { use } from "react";
-
-interface DiaryEntry {
-  id: string;
-  date: string;
-  content: string;
-  music?: {
-    title: string;
-    artist: string;
-    url: string;
-  };
-}
+import { DiaryEntry } from "@/types/diary";
 
 export default function DiaryPage({
   params,
