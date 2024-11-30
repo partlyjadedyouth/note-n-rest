@@ -20,11 +20,14 @@ export default function DiaryPage({
 }: {
   params: Promise<{ date: string }>;
 }) {
-  const { date } = use(params);
   const router = useRouter();
+  const { date } = use(params);
   const [diary, setDiary] = useState<DiaryEntry | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [isEditing, setIsEditing] = useState(false);
+  const [editContent, setEditContent] = useState("");
+  const [isSaving, setIsSaving] = useState(false);
 
   // 일기 데이터 불러오기
   useEffect(() => {
@@ -36,6 +39,7 @@ export default function DiaryPage({
         }
         const data = await response.json();
         setDiary(data);
+        setEditContent(data?.content || "");
       } catch (err) {
         setError(err instanceof Error ? err.message : "오류가 발생했습니다.");
       } finally {
@@ -46,8 +50,41 @@ export default function DiaryPage({
     fetchDiary();
   }, [date]);
 
+  // 수정 저장 처리
+  const handleSave = async () => {
+    setIsSaving(true);
+    try {
+      const response = await fetch(`/api/diary/${date}`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ content: editContent }),
+      });
+
+      if (!response.ok) {
+        throw new Error("일기 수정에 실패했습니다.");
+      }
+
+      const updatedDiary = await response.json();
+      setDiary(updatedDiary);
+      setIsEditing(false);
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "오류가 발생했습니다.");
+    } finally {
+      setIsSaving(false);
+    }
+  };
+
   // 뒤로가기 처리
   const handleBack = () => {
+    if (isEditing) {
+      if (confirm("수정을 취소하시겠습니까?")) {
+        setIsEditing(false);
+        setEditContent(diary?.content || "");
+      }
+      return;
+    }
     router.push("/");
   };
 
@@ -73,7 +110,6 @@ export default function DiaryPage({
   if (!diary) {
     return (
       <div className="min-h-screen bg-[#FFFBEB] p-4 relative">
-        {/* 뒤로가기 버튼 */}
         <button
           onClick={handleBack}
           className="mb-4 p-2 hover:bg-white rounded-lg transition-colors"
@@ -112,25 +148,36 @@ export default function DiaryPage({
   return (
     <div className="min-h-screen bg-[#FFFBEB] p-4">
       <div className="max-w-md mx-auto space-y-6">
-        {/* 뒤로가기 버튼 */}
-        <button
-          onClick={handleBack}
-          className="p-2 hover:bg-white rounded-lg transition-colors"
-        >
-          <svg
-            className="w-6 h-6 text-gray-600"
-            fill="none"
-            stroke="currentColor"
-            viewBox="0 0 24 24"
+        {/* 상단 버튼 영역 */}
+        <div className="flex justify-between items-center">
+          <button
+            onClick={handleBack}
+            className="p-2 hover:bg-white rounded-lg transition-colors"
           >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth={2}
-              d="M15 19l-7-7 7-7"
-            />
-          </svg>
-        </button>
+            <svg
+              className="w-6 h-6 text-gray-600"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M15 19l-7-7 7-7"
+              />
+            </svg>
+          </button>
+          {!isEditing && (
+            <button
+              onClick={() => setIsEditing(true)}
+              className="px-4 py-2 text-sm text-gray-600 hover:bg-white 
+                       rounded-lg transition-colors"
+            >
+              수정
+            </button>
+          )}
+        </div>
 
         {/* 음악 플레이어 */}
         {diary.music && (
@@ -148,7 +195,43 @@ export default function DiaryPage({
 
         {/* 일기 내용 */}
         <div className="bg-white rounded-xl p-4 shadow-sm">
-          <p className="text-gray-800 whitespace-pre-wrap">{diary.content}</p>
+          {isEditing ? (
+            <div className="space-y-4">
+              <textarea
+                value={editContent}
+                onChange={(e) => setEditContent(e.target.value)}
+                className="w-full h-[60vh] p-4 bg-white rounded-xl 
+                         border border-gray-200 focus:border-[#FFE8A3] 
+                         focus:ring-2 focus:ring-[#FFE8A3] focus:outline-none 
+                         transition-colors resize-none"
+                required
+              />
+              <div className="flex justify-end space-x-2">
+                <button
+                  onClick={() => {
+                    setIsEditing(false);
+                    setEditContent(diary.content);
+                  }}
+                  className="px-4 py-2 text-sm text-gray-600 hover:bg-gray-100 
+                           rounded-lg transition-colors"
+                  disabled={isSaving}
+                >
+                  취소
+                </button>
+                <button
+                  onClick={handleSave}
+                  disabled={isSaving}
+                  className="px-4 py-2 text-sm bg-[#FFE8A3] hover:bg-[#FFE093] 
+                           text-gray-800 rounded-lg transition-colors 
+                           disabled:opacity-50 disabled:cursor-not-allowed"
+                >
+                  {isSaving ? "저장 중..." : "저장"}
+                </button>
+              </div>
+            </div>
+          ) : (
+            <p className="text-gray-800 whitespace-pre-wrap">{diary.content}</p>
+          )}
         </div>
       </div>
     </div>
