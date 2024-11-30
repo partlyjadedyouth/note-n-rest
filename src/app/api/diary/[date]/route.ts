@@ -5,11 +5,10 @@ import { Diary } from "@/models/Diary";
 
 export async function GET(
   request: NextRequest,
-  context: { params: Promise<{ date: string }> },
+  { params }: { params: { date: string } },
 ) {
   try {
-    // params 전체를 await로 처리
-    const { date } = await context.params;
+    const { date } = params;
 
     // 세션에서 사용자 ID 확인
     const cookieStore = await cookies();
@@ -47,11 +46,10 @@ export async function GET(
 
 export async function PUT(
   request: NextRequest,
-  context: { params: Promise<{ date: string }> },
+  { params }: { params: { date: string } },
 ) {
   try {
-    // params 전체를 await로 처리
-    const { date } = await context.params;
+    const { date } = params;
 
     // 세션에서 사용자 ID 확인
     const cookieStore = await cookies();
