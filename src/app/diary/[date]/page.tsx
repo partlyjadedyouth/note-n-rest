@@ -3,17 +3,7 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { use } from "react";
-
-interface DiaryEntry {
-  id: string;
-  date: string;
-  content: string;
-  music?: {
-    title: string;
-    artist: string;
-    url: string;
-  };
-}
+import { DiaryEntry } from "@/types";
 
 export default function DiaryPage({
   params,
@@ -178,20 +168,6 @@ export default function DiaryPage({
             </button>
           )}
         </div>
-
-        {/* 음악 플레이어 */}
-        {diary.music && (
-          <div className="bg-white rounded-xl p-4 shadow-sm">
-            <h2 className="text-lg font-bold text-gray-800 mb-2">
-              오늘의 음악
-            </h2>
-            <div className="space-y-2">
-              <p className="text-sm text-gray-600">{diary.music.title}</p>
-              <p className="text-xs text-gray-500">{diary.music.artist}</p>
-              <audio src={diary.music.url} controls className="w-full" />
-            </div>
-          </div>
-        )}
 
         {/* 일기 내용 */}
         <div className="bg-white rounded-xl p-4 shadow-sm">

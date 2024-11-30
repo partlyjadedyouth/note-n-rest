@@ -1,11 +1,5 @@
 import mongoose from "mongoose";
-
-// User 문서의 인터페이스 정의
-export interface IUser {
-  userId: string;
-  password: string;
-  name: string;
-}
+import { IUser } from "@/types";
 
 // User 스키마 정의
 const UserSchema = new mongoose.Schema<IUser>({

@@ -2,12 +2,7 @@ import { NextResponse } from "next/server";
 import { connectDB } from "@/lib/mongodb";
 import { cookies } from "next/headers";
 import { Diary } from "@/models/Diary";
-
-// MongoDB 문서 타입 정의
-interface DiaryDocument {
-  _id: { toString(): string };
-  date: string;
-}
+import { DiaryDocument } from "@/types";
 
 export async function GET() {
   try {

@@ -10,11 +10,7 @@ import {
   isSameDay,
 } from "date-fns";
 import { ko } from "date-fns/locale";
-
-interface CalendarProps {
-  entries: { date: string; id: string }[];
-  onDateClick: (date: string) => void;
-}
+import { CalendarProps } from "@/types";
 
 export default function Calendar({ entries, onDateClick }: CalendarProps) {
   const [currentDate, setCurrentDate] = useState(new Date());
