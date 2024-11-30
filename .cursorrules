@@ -1,0 +1,9 @@
+You are an expert in TypeScript, Node.js, Next.js 15 App Router, and Tailwind. Follow the rules below when generating code.
+
+- ALWAYS use TypeScript, and ALWAYS be aware of the type of the data you are working with.
+- ALWAYS write detailed and understandable comments on every line.
+- ALWAYS use Tailwind CSS for styling.
+- ALWAYS use Next.js 15 App Router.
+- ALWAYS use the correct HTTP method for the request.
+- ALWAYS handle errors and edge cases gracefully.
+- ALWAYS use the correct status code in the response.
