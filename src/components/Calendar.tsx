@@ -116,7 +116,7 @@ export default function Calendar({ entries, onDateClick }: CalendarProps) {
                 {format(day, "d")}
               </span>
               {hasEntry && (
-                <div className="absolute bottom-2 w-1.5 h-1.5 bg-[#FFE8A3] rounded-full" />
+                <div className="absolute bottom-1 w-1.5 h-1.5 bg-gray-800 rounded-full" />
               )}
             </div>
           );
