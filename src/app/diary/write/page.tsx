@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, FormEvent, Suspense } from "react";
+import { useState, FormEvent, Suspense, useEffect } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 
 function WriteDiaryForm() {
@@ -12,6 +12,32 @@ function WriteDiaryForm() {
   const [content, setContent] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
+
+  // 페이지 진입 시 해당 날짜의 일기 존재 여부 확인
+  useEffect(() => {
+    const checkExistingDiary = async () => {
+      try {
+        const response = await fetch(`/api/diary/${date}`);
+        if (!response.ok) {
+          throw new Error("일기 조회 중 오류가 발생했습니다.");
+        }
+        const data = await response.json();
+
+        // 이미 일기가 존재하면 해당 일기 페이지로 리다이렉트
+        if (data) {
+          router.push(`/diary/${date}`);
+          return;
+        }
+        setIsLoading(false);
+      } catch (err) {
+        setError(err instanceof Error ? err.message : "오류가 발생했습니다.");
+        setIsLoading(false);
+      }
+    };
+
+    checkExistingDiary();
+  }, [date, router]);
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
@@ -41,6 +67,15 @@ function WriteDiaryForm() {
       setIsSubmitting(false);
     }
   };
+
+  // 로딩 중이면 로딩 표시
+  if (isLoading) {
+    return (
+      <div className="min-h-screen bg-[#FFFBEB] p-4 flex items-center justify-center">
+        <div className="text-gray-600">로딩 중...</div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-[#FFFBEB] p-4">
