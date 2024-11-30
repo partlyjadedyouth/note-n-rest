@@ -1,18 +1,12 @@
 import { NextRequest, NextResponse } from "next/server";
 import { connectDB } from "@/lib/mongodb";
-import { cookies } from "next/headers";
 import { Diary } from "@/models/Diary";
 
-export async function GET(
-  request: NextRequest,
-  context: { params: { date: string } },
-) {
+export async function GET(request: NextRequest) {
   try {
-    const params = await context.params;
-    const date = params.date;
+    const date = request.nextUrl.pathname.split("/").pop();
 
-    const cookieStore = await cookies();
-    const sessionUserId = cookieStore.get("session")?.value;
+    const sessionUserId = request.cookies.get("session")?.value;
 
     if (!sessionUserId) {
       return NextResponse.json(
@@ -42,16 +36,11 @@ export async function GET(
   }
 }
 
-export async function PUT(
-  request: NextRequest,
-  context: { params: { date: string } },
-) {
+export async function PUT(request: NextRequest) {
   try {
-    const params = await context.params;
-    const date = params.date;
+    const date = request.nextUrl.pathname.split("/").pop();
 
-    const cookieStore = await cookies();
-    const sessionUserId = cookieStore.get("session")?.value;
+    const sessionUserId = request.cookies.get("session")?.value;
 
     if (!sessionUserId) {
       return NextResponse.json(
