@@ -44,7 +44,9 @@ export default function HomePage() {
 
   // 일기 작성 페이지로 이동
   const handleWrite = () => {
-    router.push("/diary/write");
+    // 오늘 날짜를 YYYY-MM-DD 형식으로 가져옴
+    const today = new Date().toISOString().split("T")[0];
+    router.push(`/diary/write?date=${today}`);
   };
 
   return (

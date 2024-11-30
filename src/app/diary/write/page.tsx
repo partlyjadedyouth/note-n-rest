@@ -1,9 +1,9 @@
 "use client";
 
-import { useState, FormEvent } from "react";
+import { useState, FormEvent, Suspense } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 
-export default function WriteDiaryPage() {
+function WriteDiaryForm() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const date =
@@ -13,7 +13,6 @@ export default function WriteDiaryPage() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  // 일기 저장 처리
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
     setIsSubmitting(true);
@@ -35,7 +34,6 @@ export default function WriteDiaryPage() {
         throw new Error("일기 저장에 실패했습니다.");
       }
 
-      // 저장 성공 시 해당 날짜의 일기 페이지로 이동
       router.push(`/diary/${date}`);
     } catch (err) {
       setError(err instanceof Error ? err.message : "오류가 발생했습니다.");
@@ -47,7 +45,6 @@ export default function WriteDiaryPage() {
   return (
     <div className="min-h-screen bg-[#FFFBEB] p-4">
       <div className="max-w-md mx-auto space-y-4">
-        {/* 에러 메시지 */}
         {error && (
           <div className="bg-red-50 border border-red-200 text-red-600 px-4 py-3 rounded-lg text-sm">
             {error}
@@ -55,7 +52,6 @@ export default function WriteDiaryPage() {
         )}
 
         <form onSubmit={handleSubmit} className="space-y-4">
-          {/* 일기 작성 영역 */}
           <textarea
             value={content}
             onChange={(e) => setContent(e.target.value)}
@@ -67,7 +63,6 @@ export default function WriteDiaryPage() {
             required
           />
 
-          {/* 완료 버튼 */}
           <button
             type="submit"
             disabled={isSubmitting}
@@ -80,5 +75,13 @@ export default function WriteDiaryPage() {
         </form>
       </div>
     </div>
+  );
+}
+
+export default function WriteDiaryPage() {
+  return (
+    <Suspense fallback={<div>Loading...</div>}>
+      <WriteDiaryForm />
+    </Suspense>
   );
 }
