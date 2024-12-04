@@ -102,31 +102,39 @@ export default function DiaryPage({
   // 일기가 없는 경우
   if (!diary) {
     return (
-      <div className="min-h-screen bg-[#FFFBEB] p-4 relative">
-        <BackButton onClick={handleBack} className="mb-4 m-6 h-6" />
+      <div className="min-h-screen bg-[#FFFBEB] flex flex-col">
+        {/* 상단 영역 */}
+        <div className="p-4">
+          <BackButton onClick={handleBack} className="m-6 h-6" />
+        </div>
 
-        <div className="flex flex-col items-center justify-center min-h-screen">
+        {/* 중앙 컨텐츠 영역 */}
+        <div className="flex-1 flex items-center justify-center">
           <p className="text-gray-600">작성한 일기가 없습니다</p>
         </div>
-        <button
-          onClick={() => router.push(`/diary/write?date=${date}`)}
-          className="fixed bottom-6 right-6 w-14 h-14 bg-[#FFE8A3] text-gray-800 
-                   rounded-full flex items-center justify-center shadow-lg 
-                   hover:bg-[#FFE093] transition-colors"
-        >
-          <span className="text-2xl">+</span>
-        </button>
+
+        {/* 하단 버튼 영역 */}
+        <div className="p-4">
+          <button
+            onClick={() => router.push(`/diary/write?date=${date}`)}
+            className="fixed bottom-6 right-6 w-14 h-14 bg-[#FFE8A3] text-gray-800 
+                     rounded-full flex items-center justify-center shadow-lg 
+                     hover:bg-[#FFE093] transition-colors"
+          >
+            <span className="text-2xl">+</span>
+          </button>
+        </div>
       </div>
     );
   }
 
   // 일기가 있는 경우
   return (
-    <div className="min-h-screen bg-[#FFFBEB] p-4">
-      <div className="max-w-md mx-auto space-y-6">
+    <div className="min-h-screen bg-[#FFFBEB] flex flex-col">
+      <div className="p-4 flex-1 flex flex-col max-w-md mx-auto w-full">
         {/* 상단 버튼 영역 */}
-        <div className="flex justify-between items-center">
-          <BackButton onClick={handleBack} />
+        <div className="flex justify-between items-center mb-6">
+          <BackButton onClick={handleBack} className="m-6 h-6" />
           {!isEditing && (
             <button
               onClick={() => setIsEditing(true)}
@@ -138,20 +146,20 @@ export default function DiaryPage({
           )}
         </div>
 
-        {/* 일기 내용 */}
+        {/* 일기 내용 영역 - flex-1을 사용하여 남은 공간을 채움 */}
         <div className="bg-white rounded-xl p-4 shadow-sm">
           {isEditing ? (
-            <div className="space-y-4">
+            <div className="h-full flex flex-col">
               <textarea
                 value={editContent}
                 onChange={(e) => setEditContent(e.target.value)}
-                className="w-full h-[60vh] p-4 bg-white rounded-xl 
+                className="flex-1 p-4 bg-white rounded-xl 
                          border border-gray-200 focus:border-[#FFE8A3] 
                          focus:ring-2 focus:ring-[#FFE8A3] focus:outline-none 
-                         transition-colors resize-none"
+                         transition-colors resize-none min-h-[50vh]"
                 required
               />
-              <div className="flex justify-end space-x-2">
+              <div className="flex justify-end space-x-2 mt-4">
                 <button
                   onClick={() => {
                     setIsEditing(false);
