@@ -29,3 +29,21 @@ export interface DiaryDocument {
   _id: { toString(): string };
   date: string;
 }
+
+// 그리드 컴포넌트의 props 타입 정의
+export interface CalendarGridProps {
+  days: Date[];
+  currentDate: Date;
+  entries: {
+    date: string;
+    id: string;
+  }[];
+  onDateClick: (date: string) => void;
+}
+
+// 헤더 컴포넌트의 props 타입 정의
+export interface CalendarHeaderProps {
+  currentDate: Date;
+  onPrevMonth: () => void;
+  onNextMonth: () => void;
+}

@@ -1,15 +1,20 @@
-import { format, isSameDay, isSameMonth } from "date-fns";
+/**
+ * 캘린더 그리드 컴포넌트
+ *
+ * 달력의 날짜들을 그리드 형태로 표시하는 컴포넌트
+ * - 현재 월의 모든 날짜 표시
+ * - 일기가 작성된 날짜 하이라이트
+ * - 날짜 클릭 시 해당 날짜의 일기 페이지로 이동
+ *
+ * @param {Object} props
+ * @param {Date[]} props.days - 현재 월의 모든 날짜 배열
+ * @param {Date} props.currentDate - 현재 표시 중인 날짜
+ * @param {Array} props.entries - 일기가 작성된 날짜 목록
+ * @param {Function} props.onDateClick - 날짜 클릭 핸들러
+ */
 
-interface CalendarGridProps {
-  // 현재 월의 모든 날짜 배열
-  days: Date[];
-  // 현재 선택된 날짜
-  currentDate: Date;
-  // 일기 엔트리 배열
-  entries: { date: string; id: string }[];
-  // 날짜 클릭 핸들러
-  onDateClick: (date: string) => void;
-}
+import { format, isSameMonth, isSameDay, isToday, parseISO } from "date-fns";
+import { CalendarGridProps } from "@/types";
 
 export default function CalendarGrid({
   days,
@@ -18,39 +23,50 @@ export default function CalendarGrid({
   onDateClick,
 }: CalendarGridProps) {
   return (
-    <div className="grid grid-cols-7 gap-2">
+    // 날짜 그리드 컨테이너
+    <div className="grid grid-cols-7 gap-1">
+      {/* 모든 날짜를 순회하며 날짜 셀 생성 */}
       {days.map((day) => {
-        // 날짜 문자열 포맷팅
-        const dateStr = format(day, "yyyy-MM-dd");
-        // 해당 날짜에 일기가 있는지 확인
-        const hasEntry = entries.some((entry) => entry.date === dateStr);
-        // 오늘 날짜인지 확인
-        const isToday = isSameDay(day, new Date());
-        // 현재 월의 날짜인지 확인
-        const isCurrentMonth = isSameMonth(day, currentDate);
+        // 현재 날짜를 YYYY-MM-DD 형식의 문자열로 변환
+        const dateString = format(day, "yyyy-MM-dd");
+
+        // 해당 날짜에 일기가 작성되어 있는지 확인
+        const hasEntry = entries.some((entry) =>
+          isSameDay(parseISO(entry.date), day),
+        );
 
         return (
-          <div
-            key={dateStr}
-            onClick={() => onDateClick(dateStr)}
+          <button
+            key={day.toString()}
+            onClick={() => onDateClick(dateString)}
+            // 날짜 셀의 스타일링 - 조건부 클래스 적용
             className={`
-              relative aspect-square flex flex-col items-center justify-center
-              rounded-lg transition-all duration-200 cursor-pointer
-              ${isCurrentMonth ? "hover:bg-[#FFFBEB]" : "text-gray-400"}
-              ${isToday ? "ring-2 ring-[#FFE8A3]" : ""}
+              h-10 flex items-center justify-center rounded-lg text-sm
+              transition-colors relative
+              ${
+                // 현재 월의 날짜가 아닌 경우 흐리게 표시
+                !isSameMonth(day, currentDate)
+                  ? "text-gray-300"
+                  : "text-gray-800"
+              }
+              ${
+                // 오늘 날짜인 경우 특별한 스타일 적용
+                isToday(day)
+                  ? "bg-[#FFE8A3] text-gray-800 font-semibold"
+                  : "hover:bg-gray-100"
+              }
             `}
           >
-            <span
-              className={`text-sm ${
-                isCurrentMonth ? "text-gray-800" : "text-gray-400"
-              }`}
-            >
-              {format(day, "d")}
-            </span>
+            {/* 날짜 숫자 표시 */}
+            {format(day, "d")}
+
+            {/* 일기가 있는 경우 표시할 인디케이터 */}
             {hasEntry && (
-              <div className="absolute bottom-1 w-1 h-1 bg-gray-800 rounded-full" />
+              <div className="absolute bottom-1 left-1/2 transform -translate-x-1/2">
+                <div className="w-1.5 h-1.5 bg-[#FFE8A3] rounded-full" />
+              </div>
             )}
-          </div>
+          </button>
         );
       })}
     </div>

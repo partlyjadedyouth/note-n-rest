@@ -1,14 +1,17 @@
+/**
+ * 캘린더 헤더 컴포넌트
+ *
+ * 현재 표시되는 년월과 이전/다음 월 이동 버튼을 포함하는 캘린더 상단 컴포넌트
+ *
+ * @param {Object} props
+ * @param {Date} props.currentDate - 현재 표시되는 날짜
+ * @param {Function} props.onPrevMonth - 이전 월 이동 핸들러
+ * @param {Function} props.onNextMonth - 다음 월 이동 핸들러
+ */
+
 import { format } from "date-fns";
 import { ko } from "date-fns/locale";
-
-interface CalendarHeaderProps {
-  // 현재 선택된 날짜
-  currentDate: Date;
-  // 이전 달로 이동하는 함수
-  onPrevMonth: () => void;
-  // 다음 달로 이동하는 함수
-  onNextMonth: () => void;
-}
+import { CalendarHeaderProps } from "@/types";
 
 export default function CalendarHeader({
   currentDate,
@@ -16,13 +19,15 @@ export default function CalendarHeader({
   onNextMonth,
 }: CalendarHeaderProps) {
   return (
-    <div className="flex justify-between items-center mb-6">
+    // 헤더 컨테이너
+    <div className="flex justify-between items-center mb-4">
+      {/* 이전 월 이동 버튼 */}
       <button
         onClick={onPrevMonth}
-        className="p-2 hover:bg-[#FFFBEB] rounded-lg transition-colors"
+        className="p-2 hover:bg-gray-100 rounded-lg transition-colors"
       >
         <svg
-          className="w-6 h-6 text-gray-600"
+          className="w-5 h-5 text-gray-600"
           fill="none"
           stroke="currentColor"
           viewBox="0 0 24 24"
@@ -35,15 +40,20 @@ export default function CalendarHeader({
           />
         </svg>
       </button>
-      <h2 className="text-xl font-bold text-gray-800">
+
+      {/* 현재 년월 표시 */}
+      <h2 className="text-lg font-semibold text-gray-800">
+        {/* date-fns를 사용하여 한글로 년월 포맷팅 */}
         {format(currentDate, "yyyy년 M월", { locale: ko })}
       </h2>
+
+      {/* 다음 월 이동 버튼 */}
       <button
         onClick={onNextMonth}
-        className="p-2 hover:bg-[#FFFBEB] rounded-lg transition-colors"
+        className="p-2 hover:bg-gray-100 rounded-lg transition-colors"
       >
         <svg
-          className="w-6 h-6 text-gray-600"
+          className="w-5 h-5 text-gray-600"
           fill="none"
           stroke="currentColor"
           viewBox="0 0 24 24"
