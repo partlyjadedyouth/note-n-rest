@@ -17,7 +17,7 @@ export async function POST(request: NextRequest) {
     const { date, content } = await request.json();
 
     if (!date || !content) {
-      throw new Error("필수 항목이 누락되었습니다.");
+      throw ErrorTypes.BAD_REQUEST;
     }
 
     await connectDB();

@@ -30,23 +30,16 @@ export async function GET(request: NextRequest) {
 export async function PUT(request: NextRequest) {
   try {
     const date = request.nextUrl.pathname.split("/").pop();
-
     const sessionUserId = request.cookies.get("session")?.value;
 
     if (!sessionUserId) {
-      return NextResponse.json(
-        { error: "인증되지 않은 사용자입니다." },
-        { status: 401 },
-      );
+      throw ErrorTypes.UNAUTHORIZED;
     }
 
     const { content } = await request.json();
 
     if (!content) {
-      return NextResponse.json(
-        { error: "내용이 비어있습니다." },
-        { status: 400 },
-      );
+      throw ErrorTypes.BAD_REQUEST;
     }
 
     await connectDB();
@@ -64,18 +57,11 @@ export async function PUT(request: NextRequest) {
     );
 
     if (!updatedDiary) {
-      return NextResponse.json(
-        { error: "일기를 찾을 수 없습니다." },
-        { status: 404 },
-      );
+      throw ErrorTypes.NOT_FOUND;
     }
 
     return NextResponse.json(updatedDiary, { status: 200 });
   } catch (error) {
-    console.error("일기 수정 중 오류 발생:", error);
-    return NextResponse.json(
-      { error: "서버 오류가 발생했습니다." },
-      { status: 500 },
-    );
+    return handleApiError(error);
   }
 }

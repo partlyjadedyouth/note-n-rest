@@ -26,7 +26,8 @@ export default function DiaryPage({
       try {
         const response = await fetch(`/api/diary/${date}`);
         if (!response.ok) {
-          throw new Error("일기를 불러오는데 실패했습니다.");
+          const errorData = await response.json();
+          throw new Error(errorData.error || "일기를 불러오는데 실패했습니다.");
         }
         const data = await response.json();
         setDiary(data);
@@ -61,7 +62,7 @@ export default function DiaryPage({
       setDiary(updatedDiary);
       setIsEditing(false);
     } catch (err) {
-      setError(err instanceof Error ? err.message : "오류가 발생했습니다.");
+      setError(handleClientError(err));
     } finally {
       setIsSaving(false);
     }

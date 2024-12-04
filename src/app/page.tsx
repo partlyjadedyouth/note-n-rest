@@ -5,6 +5,7 @@ import Calendar from "@/components/Calendar";
 import { useRouter } from "next/navigation";
 import { signOut } from "@/lib/auth";
 import { DiaryEntry } from "@/types";
+import { handleClientError } from "@/utils/error-handler";
 
 export default function HomePage() {
   const router = useRouter();
@@ -17,15 +18,27 @@ export default function HomePage() {
       try {
         // 사용자 정보 가져오기
         const userResponse = await fetch("/api/user");
+        if (!userResponse.ok) {
+          const errorData = await userResponse.json();
+          throw new Error(
+            errorData.error || "사용자 정보를 불러오는데 실패했습니다.",
+          );
+        }
         const userData = await userResponse.json();
         setUserName(userData.name);
 
         // 일기 엔트리 목록 가져오기
         const entriesResponse = await fetch("/api/diary/entries");
+        if (!entriesResponse.ok) {
+          const errorData = await entriesResponse.json();
+          throw new Error(
+            errorData.error || "일기 목록을 불러오는데 실패했습니다.",
+          );
+        }
         const entriesData = await entriesResponse.json();
         setDiaryEntries(entriesData);
-      } catch (error) {
-        console.error("데이터 로딩 중 오류 발생:", error);
+      } catch (err) {
+        console.error(handleClientError(err));
       }
     };
     fetchData();

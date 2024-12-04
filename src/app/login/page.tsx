@@ -2,6 +2,7 @@
 
 import { FormEvent, useState } from "react";
 import { useRouter } from "next/navigation";
+import { handleClientError } from "@/utils/error-handler";
 
 export default function LoginPage() {
   const router = useRouter();
@@ -24,18 +25,15 @@ export default function LoginPage() {
         body: JSON.stringify({ userId, password }),
       });
 
-      const data = await response.json();
-
       if (!response.ok) {
-        throw new Error(data.error || "로그인에 실패했습니다.");
+        const errorData = await response.json();
+        throw new Error(errorData.error || "로그인에 실패했습니다.");
       }
 
       router.push("/");
       router.refresh();
     } catch (err) {
-      setError(
-        err instanceof Error ? err.message : "로그인 중 오류가 발생했습니다.",
-      );
+      setError(handleClientError(err));
     } finally {
       setIsLoading(false);
     }

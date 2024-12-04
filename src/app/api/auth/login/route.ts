@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { connectDB } from "@/lib/mongodb";
 import { User } from "@/models/User";
+import { ErrorTypes } from "@/types/error";
 import { handleApiError } from "@/utils/error-handler";
 
 export async function POST(request: NextRequest) {
@@ -8,7 +9,7 @@ export async function POST(request: NextRequest) {
     const { userId, password } = await request.json();
 
     if (!userId || !password) {
-      throw new Error("아이디와 비밀번호를 모두 입력해주세요.");
+      throw ErrorTypes.BAD_REQUEST;
     }
 
     await connectDB();

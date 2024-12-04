@@ -21,7 +21,10 @@ function WriteDiaryForm() {
       try {
         const response = await fetch(`/api/diary/${date}`);
         if (!response.ok) {
-          throw new Error("일기 조회 중 오류가 발생했습니다.");
+          const errorData = await response.json();
+          throw new Error(
+            errorData.error || "일기 조회 중 오류가 발생했습니다.",
+          );
         }
         const data = await response.json();
 
@@ -58,12 +61,13 @@ function WriteDiaryForm() {
       });
 
       if (!response.ok) {
-        throw new Error("일기 저장에 실패했습니다.");
+        const errorData = await response.json();
+        throw new Error(errorData.error || "일기 저장에 실패했습니다.");
       }
 
       router.push(`/diary/${date}`);
     } catch (err) {
-      setError(err instanceof Error ? err.message : "오류가 발생했습니다.");
+      setError(handleClientError(err));
     } finally {
       setIsSubmitting(false);
     }
