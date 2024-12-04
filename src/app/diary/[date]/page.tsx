@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { use } from "react";
 import { DiaryEntry } from "@/types";
 import { handleClientError } from "@/utils/error-handler";
+import BackButton from "@/components/BackButton";
 
 export default function DiaryPage({
   params,
@@ -102,24 +103,7 @@ export default function DiaryPage({
   if (!diary) {
     return (
       <div className="min-h-screen bg-[#FFFBEB] p-4 relative">
-        <button
-          onClick={handleBack}
-          className="mb-4 p-2 hover:bg-white rounded-lg transition-colors"
-        >
-          <svg
-            className="w-6 h-6 text-gray-600"
-            fill="none"
-            stroke="currentColor"
-            viewBox="0 0 24 24"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth={2}
-              d="M15 19l-7-7 7-7"
-            />
-          </svg>
-        </button>
+        <BackButton onClick={handleBack} className="mb-4 m-6 h-6" />
 
         <div className="flex flex-col items-center justify-center min-h-screen">
           <p className="text-gray-600">작성한 일기가 없습니다</p>
@@ -142,24 +126,7 @@ export default function DiaryPage({
       <div className="max-w-md mx-auto space-y-6">
         {/* 상단 버튼 영역 */}
         <div className="flex justify-between items-center">
-          <button
-            onClick={handleBack}
-            className="p-2 hover:bg-white rounded-lg transition-colors"
-          >
-            <svg
-              className="w-6 h-6 text-gray-600"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M15 19l-7-7 7-7"
-              />
-            </svg>
-          </button>
+          <BackButton onClick={handleBack} />
           {!isEditing && (
             <button
               onClick={() => setIsEditing(true)}

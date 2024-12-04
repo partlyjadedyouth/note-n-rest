@@ -3,6 +3,7 @@
 import { useState, FormEvent, Suspense, useEffect } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { handleClientError } from "@/utils/error-handler";
+import BackButton from "@/components/BackButton";
 
 function WriteDiaryForm() {
   const router = useRouter();
@@ -96,24 +97,7 @@ function WriteDiaryForm() {
   return (
     <div className="min-h-screen bg-[#FFFBEB] p-4">
       <div className="max-w-md mx-auto space-y-4">
-        <button
-          onClick={handleBack}
-          className="p-2 hover:bg-white rounded-lg transition-colors"
-        >
-          <svg
-            className="w-6 h-6 text-gray-600"
-            fill="none"
-            stroke="currentColor"
-            viewBox="0 0 24 24"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth={2}
-              d="M15 19l-7-7 7-7"
-            />
-          </svg>
-        </button>
+        <BackButton onClick={handleBack} className="w-5 h-5" />
 
         {error && (
           <div className="bg-red-50 border border-red-200 text-red-600 px-4 py-3 rounded-lg text-sm">
