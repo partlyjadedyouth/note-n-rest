@@ -3,17 +3,8 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { use } from "react";
-
-interface DiaryEntry {
-  id: string;
-  date: string;
-  content: string;
-  music?: {
-    title: string;
-    artist: string;
-    url: string;
-  };
-}
+import { DiaryEntry } from "@/types";
+import { handleClientError } from "@/utils/error-handler";
 
 export default function DiaryPage({
   params,
@@ -35,13 +26,14 @@ export default function DiaryPage({
       try {
         const response = await fetch(`/api/diary/${date}`);
         if (!response.ok) {
-          throw new Error("일기를 불러오는데 실패했습니다.");
+          const errorData = await response.json();
+          throw new Error(errorData.error || "일기를 불러오는데 실패했습니다.");
         }
         const data = await response.json();
         setDiary(data);
         setEditContent(data?.content || "");
       } catch (err) {
-        setError(err instanceof Error ? err.message : "오류가 발생했습니다.");
+        setError(handleClientError(err));
       } finally {
         setLoading(false);
       }
@@ -70,7 +62,7 @@ export default function DiaryPage({
       setDiary(updatedDiary);
       setIsEditing(false);
     } catch (err) {
-      setError(err instanceof Error ? err.message : "오류가 발생했습니다.");
+      setError(handleClientError(err));
     } finally {
       setIsSaving(false);
     }
@@ -178,20 +170,6 @@ export default function DiaryPage({
             </button>
           )}
         </div>
-
-        {/* 음악 플레이어 */}
-        {diary.music && (
-          <div className="bg-white rounded-xl p-4 shadow-sm">
-            <h2 className="text-lg font-bold text-gray-800 mb-2">
-              오늘의 음악
-            </h2>
-            <div className="space-y-2">
-              <p className="text-sm text-gray-600">{diary.music.title}</p>
-              <p className="text-xs text-gray-500">{diary.music.artist}</p>
-              <audio src={diary.music.url} controls className="w-full" />
-            </div>
-          </div>
-        )}
 
         {/* 일기 내용 */}
         <div className="bg-white rounded-xl p-4 shadow-sm">

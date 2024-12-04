@@ -1,48 +1,52 @@
+/**
+ * 일기 작성 API 라우트
+ *
+ * 새로운 일기를 생성하는 엔드포인트
+ * 인증된 사용자만 접근 가능하며, 날짜와 내용을 필수로 받음
+ *
+ * @returns {Promise<NextResponse>} 생성된 일기 데이터
+ */
+
 import { NextRequest, NextResponse } from "next/server";
 import { connectDB } from "@/lib/mongodb";
 import { Diary } from "@/models/Diary";
 import { cookies } from "next/headers";
+import { ErrorTypes } from "@/types/error";
+import { handleApiError } from "@/utils/error-handler";
 
 export async function POST(request: NextRequest) {
   try {
-    // 세션에서 사용자 ID 가져오기
+    // 쿠키에서 세션 사용자 ID 추출
     const cookieStore = await cookies();
     const userId = cookieStore.get("session")?.value;
 
+    // 인증되지 않은 요청 처리
     if (!userId) {
-      return NextResponse.json(
-        { error: "인증되지 않은 사용자입니다." },
-        { status: 401 },
-      );
+      throw ErrorTypes.UNAUTHORIZED;
     }
 
-    // 요청 본문 파싱
+    // 요청 본문에서 날짜와 내용 추출
     const { date, content } = await request.json();
 
-    // 필수 필드 검증
+    // 필수 입력값 검증
     if (!date || !content) {
-      return NextResponse.json(
-        { error: "필수 항목이 누락되었습니다." },
-        { status: 400 },
-      );
+      throw ErrorTypes.BAD_REQUEST;
     }
 
-    // DB 연결
+    // 데이터베이스 연결
     await connectDB();
 
-    // 일기 저장
+    // 새로운 일기 생성
     const diary = await Diary.create({
       userId,
       date,
       content,
     });
 
+    // 생성된 일기 데이터 반환
     return NextResponse.json(diary, { status: 201 });
   } catch (error) {
-    console.error("일기 저장 중 오류 발생:", error);
-    return NextResponse.json(
-      { error: "서버 오류가 발생했습니다." },
-      { status: 500 },
-    );
+    // 에러 처리
+    return handleApiError(error);
   }
 }

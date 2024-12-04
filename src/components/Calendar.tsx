@@ -1,126 +1,63 @@
+/**
+ * 메인 캘린더 컴포넌트
+ *
+ * 전체 캘린더 UI를 구성하는 컨테이너 컴포넌트
+ * - 현재 월의 날짜 관리
+ * - 월 이동 기능
+ * - 하위 컴포넌트들을 조합하여 완성된 캘린더 UI 제공
+ *
+ * @param {Object} props
+ * @param {Array} props.entries - 일기가 작성된 날짜 목록
+ * @param {Function} props.onDateClick - 날짜 클릭 시 실행될 핸들러
+ */
+
 "use client";
 
 import { useState } from "react";
-import {
-  format,
-  startOfMonth,
-  endOfMonth,
-  eachDayOfInterval,
-  isSameMonth,
-  isSameDay,
-} from "date-fns";
-import { ko } from "date-fns/locale";
-
-interface CalendarProps {
-  entries: { date: string; id: string }[];
-  onDateClick: (date: string) => void;
-}
+import { startOfMonth, endOfMonth, eachDayOfInterval } from "date-fns";
+import { CalendarProps } from "@/types";
+import CalendarHeader from "@/components/calendar/CalendarHeader";
+import CalendarWeekdays from "@/components/calendar/CalendarWeekdays";
+import CalendarGrid from "@/components/calendar/CalendarGrid";
 
 export default function Calendar({ entries, onDateClick }: CalendarProps) {
+  // 현재 표시 중인 날짜 상태 관리
   const [currentDate, setCurrentDate] = useState(new Date());
 
+  // 현재 월의 시작일과 마지막 일 계산
   const monthStart = startOfMonth(currentDate);
   const monthEnd = endOfMonth(currentDate);
+  // 현재 월의 모든 날짜를 배열로 생성
   const days = eachDayOfInterval({ start: monthStart, end: monthEnd });
 
+  // 이전 월로 이동하는 핸들러
   const prevMonth = () => {
     setCurrentDate(new Date(currentDate.setMonth(currentDate.getMonth() - 1)));
   };
 
+  // 다음 월로 이동하는 핸들러
   const nextMonth = () => {
     setCurrentDate(new Date(currentDate.setMonth(currentDate.getMonth() + 1)));
   };
 
   return (
+    // 캘린더 컨테이너 - 흰색 배경과 그림자 효과 적용
     <div className="bg-white rounded-2xl shadow-md p-4">
-      {/* Calendar Header */}
-      <div className="flex justify-between items-center mb-6">
-        <button
-          onClick={prevMonth}
-          className="p-2 hover:bg-[#FFFBEB] rounded-lg transition-colors"
-        >
-          <svg
-            className="w-6 h-6 text-gray-600"
-            fill="none"
-            stroke="currentColor"
-            viewBox="0 0 24 24"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth={2}
-              d="M15 19l-7-7 7-7"
-            />
-          </svg>
-        </button>
-        <h2 className="text-xl font-bold text-gray-800">
-          {format(currentDate, "yyyy년 M월", { locale: ko })}
-        </h2>
-        <button
-          onClick={nextMonth}
-          className="p-2 hover:bg-[#FFFBEB] rounded-lg transition-colors"
-        >
-          <svg
-            className="w-6 h-6 text-gray-600"
-            fill="none"
-            stroke="currentColor"
-            viewBox="0 0 24 24"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth={2}
-              d="M9 5l7 7-7 7"
-            />
-          </svg>
-        </button>
-      </div>
-
-      {/* Weekday Headers */}
-      <div className="grid grid-cols-7 gap-2 mb-2">
-        {["일", "월", "화", "수", "목", "금", "토"].map((day) => (
-          <div
-            key={day}
-            className="text-center text-sm font-medium text-gray-600"
-          >
-            {day}
-          </div>
-        ))}
-      </div>
-
-      {/* Calendar Grid */}
-      <div className="grid grid-cols-7 gap-2">
-        {days.map((day) => {
-          const dateStr = format(day, "yyyy-MM-dd");
-          const hasEntry = entries.some((entry) => entry.date === dateStr);
-          const isToday = isSameDay(day, new Date());
-          const isCurrentMonth = isSameMonth(day, currentDate);
-
-          return (
-            <div
-              key={dateStr}
-              onClick={() => onDateClick(dateStr)}
-              className={`
-                relative aspect-square flex flex-col items-center justify-center
-                rounded-lg transition-all duration-200 cursor-pointer
-                ${isCurrentMonth ? "hover:bg-[#FFFBEB]" : "text-gray-400"}
-                ${isToday ? "ring-2 ring-[#FFE8A3]" : ""}
-              `}
-            >
-              <span
-                className={`text-sm ${
-                  isCurrentMonth ? "text-gray-800" : "text-gray-400"
-                }`}
-              >
-                {format(day, "d")}
-              </span>
-              {hasEntry && (
-                <div className="absolute bottom-1 w-1 h-1 bg-gray-800 rounded-full" />
-              )}
-            </div>
-          );
-        })}
-      </div>
+      {/* 캘린더 헤더 - 년월 표시 및 월 이동 버튼 */}
+      <CalendarHeader
+        currentDate={currentDate}
+        onPrevMonth={prevMonth}
+        onNextMonth={nextMonth}
+      />
+      {/* 요일 표시 행 */}
+      <CalendarWeekdays />
+      {/* 날짜 그리드 - 실제 달력 날짜들 표시 */}
+      <CalendarGrid
+        days={days}
+        currentDate={currentDate}
+        entries={entries}
+        onDateClick={onDateClick}
+      />
     </div>
   );
 }

@@ -1,40 +1,42 @@
+/**
+ * 사용자 정보 조회 API 라우트
+ *
+ * 현재 로그인한 사용자의 기본 정보를 조회하는 엔드포인트
+ * 보안을 위해 비밀번호를 제외한 정보만 반환
+ *
+ * @returns {Promise<NextResponse>} 사용자 ID와 이름 정보
+ */
+
 import { NextResponse } from "next/server";
 import { connectDB } from "@/lib/mongodb";
 import { User } from "@/models/User";
 import { cookies } from "next/headers";
+import { ErrorTypes } from "@/types/error";
+import { handleApiError } from "@/utils/error-handler";
 
 export async function GET() {
   try {
-    // 쿠키에서 세션 정보 가져오기
+    // 쿠키에서 세션 사용자 ID 추출
     const cookieStore = await cookies();
     const sessionUserId = cookieStore.get("session")?.value;
 
-    // 세션이 없는 경우 인증 오류 반환
+    // 인증되지 않은 요청 처리
     if (!sessionUserId) {
-      return NextResponse.json(
-        { error: "인증되지 않은 사용자입니다." },
-        { status: 401 },
-      );
+      throw ErrorTypes.UNAUTHORIZED;
     }
 
-    // DB 연결
+    // 데이터베이스 연결
     await connectDB();
 
-    // 사용자 정보 조회 (비밀번호 제외)
-    const user = await User.findOne(
-      { userId: sessionUserId },
-      { password: 0 }, // 비밀번호 필드 제외
-    );
+    // 사용자 정보 조회 (비밀번호 필드 제외)
+    const user = await User.findOne({ userId: sessionUserId }, { password: 0 });
 
-    // 사용자가 존재하지 않는 경우
+    // 사용자를 찾지 못한 경우 처리
     if (!user) {
-      return NextResponse.json(
-        { error: "사용자를 찾을 수 없습니다." },
-        { status: 404 },
-      );
+      throw ErrorTypes.NOT_FOUND;
     }
 
-    // 사용자 정보 반환
+    // 필요한 사용자 정보만 선택하여 반환
     return NextResponse.json(
       {
         userId: user.userId,
@@ -43,10 +45,7 @@ export async function GET() {
       { status: 200 },
     );
   } catch (error) {
-    console.error("사용자 정보 조회 중 오류 발생:", error);
-    return NextResponse.json(
-      { error: "서버 오류가 발생했습니다." },
-      { status: 500 },
-    );
+    // 에러 처리
+    return handleApiError(error);
   }
 }
