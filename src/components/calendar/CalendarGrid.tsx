@@ -63,7 +63,7 @@ export default function CalendarGrid({
             {/* 일기가 있는 경우 표시할 인디케이터 */}
             {hasEntry && (
               <div className="absolute bottom-1 left-1/2 transform -translate-x-1/2">
-                <div className="w-1.5 h-1.5 bg-[#FFE8A3] rounded-full" />
+                <div className="w-1 h-1 bg-black rounded-full" />
               </div>
             )}
           </button>
