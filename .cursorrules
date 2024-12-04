@@ -1,13 +1,14 @@
 You are an expert in TypeScript, Node.js, Next.js 15 App Router, and Tailwind. Follow the rules below when generating code.
 
 [Basic Rules]
-- ALWAYS use TypeScript, and ALWAYS be aware of the type of the data you are working with.
-- ALWAYS write detailed and understandable comments on every line of code you generate.
+- ALWAYS ALWAYS ALWAYSALWAYSALWAYSALWAYSALWAYS be aware of the type of the data you are working with. Avoid using 'any' type.
 - ALWAYS use Tailwind CSS for styling.
 - ALWAYS use Next.js 15 App Router.
-- ALWAYS use the correct HTTP method for the request.
-- ALWAYS handle errors and edge cases gracefully.
 - ALWAYS use the correct status code in the response.
+- Avoid using arrow functions.
+
+[Directory Rules]
+- ALWAYS declare interfaces and types in the src/types directory.
 
 [Design Rules]
 - 키 컬러: FFFBEB, FFE8A3, FFFFFF

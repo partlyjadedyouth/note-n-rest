@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { use } from "react";
 import { DiaryEntry } from "@/types";
+import { handleClientError } from "@/utils/error-handler";
 
 export default function DiaryPage({
   params,
@@ -31,7 +32,7 @@ export default function DiaryPage({
         setDiary(data);
         setEditContent(data?.content || "");
       } catch (err) {
-        setError(err instanceof Error ? err.message : "오류가 발생했습니다.");
+        setError(handleClientError(err));
       } finally {
         setLoading(false);
       }

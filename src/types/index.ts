@@ -15,14 +15,6 @@ export interface IUser {
   name: string;
 }
 
-// API 응답 관련 타입
-export interface ApiResponse<T> {
-  success?: boolean;
-  message?: string;
-  error?: string;
-  data?: T;
-}
-
 // 캘린더 컴포넌트 props 타입
 export interface CalendarProps {
   entries: {

@@ -2,6 +2,7 @@
 
 import { useState, FormEvent, Suspense, useEffect } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
+import { handleClientError } from "@/utils/error-handler";
 
 function WriteDiaryForm() {
   const router = useRouter();
@@ -31,7 +32,7 @@ function WriteDiaryForm() {
         }
         setIsLoading(false);
       } catch (err) {
-        setError(err instanceof Error ? err.message : "오류가 발생했습니다.");
+        setError(handleClientError(err));
         setIsLoading(false);
       }
     };
