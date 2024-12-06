@@ -51,4 +51,20 @@
            focus:border-[#FFE8A3] focus:ring-2 focus:ring-[#FFE8A3] 
            focus:outline-none transition-colors resize-none;
   }
+
+  .header-container {
+    @apply flex justify-between items-center h-14 px-4 bg-[#FFFBEB] shadow-sm mb-4 relative;
+  }
+
+  .back-button {
+    @apply w-10 h-10 flex items-center justify-center hover:bg-white/50 rounded-lg transition-colors;
+  }
+
+  .header-title {
+    @apply text-lg font-semibold text-gray-800 absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2;
+  }
+
+  .header-right {
+    @apply w-10;
+  }
 }
