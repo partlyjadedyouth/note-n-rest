@@ -1,3 +1,21 @@
+@font-face {
+  font-family: "Cafe24SsurroundAir";
+  src: url("/fonts/Cafe24SsurroundAir-v1.1.woff2") format("woff2"),
+    url("/fonts/Cafe24SsurroundAir-v1.1.woff") format("woff");
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@layer base {
+  html {
+    font-family: "Cafe24SsurroundAir", system-ui, sans-serif;
+  }
+  body {
+    font-family: "Cafe24SsurroundAir", system-ui, sans-serif;
+  }
+}

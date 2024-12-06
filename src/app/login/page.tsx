@@ -42,8 +42,8 @@ export default function LoginPage() {
   return (
     <div className="min-h-screen flex items-center justify-center bg-[#FFFBEB]">
       <div className="w-[90%] max-w-[400px] p-8 space-y-6 bg-white rounded-2xl shadow-lg">
-        <h1 className="text-3xl font-bold text-center text-gray-800">
-          일기 쓰기
+        <h1 className="text-2xl font-bold text-center text-gray-800">
+          Nore: Note & Rest
         </h1>
 
         {error && (
