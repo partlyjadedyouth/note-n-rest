@@ -24,7 +24,11 @@ export default function RootLayout({
 }) {
   return (
     <html lang="ko" className="light" suppressHydrationWarning>
-      <body>{children}</body>
+      <body className="bg-white">
+        <div className="mx-auto min-h-screen max-w-[430px] bg-[#FFFBEB] shadow-xl">
+          {children}
+        </div>
+      </body>
     </html>
   );
 }

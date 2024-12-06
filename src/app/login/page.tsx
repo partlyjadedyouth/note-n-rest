@@ -42,9 +42,7 @@ export default function LoginPage() {
   return (
     <div className="min-h-screen flex items-center justify-center bg-[#FFFBEB]">
       <div className="w-[90%] max-w-[400px] p-8 space-y-6 bg-white rounded-2xl shadow-lg">
-        <h1 className="text-2xl font-bold text-center text-gray-800">
-          Nore: Note & Rest
-        </h1>
+        <h1 className="text-2xl font-bold text-center">Nore: Note & Rest</h1>
 
         {error && (
           <div className="bg-red-50 border border-red-200 text-red-600 px-4 py-3 rounded-lg text-sm">
@@ -65,7 +63,7 @@ export default function LoginPage() {
               type="text"
               value={userId}
               onChange={(e) => setUserId(e.target.value)}
-              className="w-full px-4 py-3 rounded-lg border border-gray-200 focus:border-[#FFE8A3] focus:ring-2 focus:ring-[#FFE8A3] focus:outline-none transition-colors"
+              className="input-primary"
               required
             />
           </div>
@@ -90,7 +88,7 @@ export default function LoginPage() {
           <button
             type="submit"
             disabled={isLoading}
-            className="w-full py-3 px-4 bg-[#FFE8A3] hover:bg-[#FFE093] text-gray-800 font-medium rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+            className="w-full py-3 px-4 btn-primary rounded-lg"
           >
             {isLoading ? "로그인 중..." : "로그인"}
           </button>

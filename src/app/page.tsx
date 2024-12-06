@@ -21,7 +21,7 @@ export default function HomePage() {
         if (!userResponse.ok) {
           const errorData = await userResponse.json();
           throw new Error(
-            errorData.error || "사용자 정보를 불러오는데 실패했습니다.",
+            errorData.error || "사용자 정보를 불러오는데 실패했습니다."
           );
         }
         const userData = await userResponse.json();
@@ -32,7 +32,7 @@ export default function HomePage() {
         if (!entriesResponse.ok) {
           const errorData = await entriesResponse.json();
           throw new Error(
-            errorData.error || "일기 목록을 불러오는데 실패했습니다.",
+            errorData.error || "일기 목록을 불러오는데 실패했습니다."
           );
         }
         const entriesData = await entriesResponse.json();
@@ -58,10 +58,10 @@ export default function HomePage() {
   };
 
   return (
-    <div className="min-h-screen bg-[#FFFBEB] p-4">
-      <div className="max-w-md mx-auto">
+    <div className="min-h-screen p-4">
+      <div className="w-full">
         <div className="flex justify-between items-center mb-6 bg-white rounded-xl p-4 shadow-sm">
-          <h1 className="text-xl font-bold text-gray-800">
+          <h1 className="text-m font-bold text-gray-800">
             안녕하세요, {userName}님!
           </h1>
           <button
