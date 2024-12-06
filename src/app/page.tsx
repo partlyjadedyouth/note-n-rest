@@ -58,8 +58,8 @@ export default function HomePage() {
   };
 
   return (
-    <div className="min-h-screen p-4">
-      <div className="w-full">
+    <div className="min-h-screen p-4 relative">
+      <div className="w-full h-full flex flex-col">
         <div className="flex justify-between items-center mb-6 bg-white rounded-xl p-4 shadow-sm">
           <h1 className="text-m font-bold text-gray-800">
             안녕하세요, {userName}님!
@@ -79,11 +79,10 @@ export default function HomePage() {
 
         <button
           onClick={handleWrite}
-          className="fixed bottom-6 right-6 w-14 h-14 bg-[#FFE8A3] text-gray-800 
-                   rounded-full flex items-center justify-center shadow-lg 
-                   hover:bg-[#FFE093] transition-colors"
+          className="absolute bottom-6 right-6 btn-floating"
+          style={{ maxWidth: "calc(100% - 2rem)" }}
         >
-          <span className="text-2xl">+</span>
+          <span className="text-4xl text-[#FFFBEB]">+</span>
         </button>
       </div>
     </div>
