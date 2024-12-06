@@ -13,7 +13,15 @@
  * @param {Function} props.onDateClick - 날짜 클릭 핸들러
  */
 
-import { format, isSameMonth, isSameDay, isToday, parseISO } from "date-fns";
+import {
+  format,
+  isSameMonth,
+  isSameDay,
+  isToday,
+  parseISO,
+  startOfMonth,
+  endOfMonth,
+} from "date-fns";
 import { CalendarGridProps } from "@/types";
 
 export default function CalendarGrid({
@@ -22,43 +30,52 @@ export default function CalendarGrid({
   entries,
   onDateClick,
 }: CalendarGridProps) {
+  // 현재 월의 시작일과 끝일을 미리 계산
+  const currentMonthStart = startOfMonth(currentDate);
+  const currentMonthEnd = endOfMonth(currentDate);
+
+  // 각 날짜별 상태를 미리 계산
+  const daysWithState = days.map((day) => ({
+    date: day,
+    dateString: format(day, "yyyy-MM-dd"),
+    isCurrentMonth: day >= currentMonthStart && day <= currentMonthEnd,
+    isToday: isToday(day),
+    hasEntry: entries.some((entry) => isSameDay(parseISO(entry.date), day)),
+  }));
+
   return (
     // 날짜 그리드 컨테이너
-    <div className="grid grid-cols-7 gap-1">
+    <div className="grid grid-cols-7 grid-rows-6 gap-1 flex-1">
       {/* 모든 날짜를 순회하며 날짜 셀 생성 */}
-      {days.map((day) => {
-        // 현재 날짜를 YYYY-MM-DD 형식의 문자열로 변환
-        const dateString = format(day, "yyyy-MM-dd");
-
-        // 해당 날짜에 일기가 작성되어 있는지 확인
-        const hasEntry = entries.some((entry) =>
-          isSameDay(parseISO(entry.date), day),
-        );
-
-        return (
+      {daysWithState.map(
+        ({
+          date,
+          dateString,
+          isCurrentMonth,
+          isToday: isTodayDate,
+          hasEntry,
+        }) => (
           <button
-            key={day.toString()}
+            key={date.toString()}
             onClick={() => onDateClick(dateString)}
             // 날짜 셀의 스타일링 - 조건부 클래스 적용
             className={`
-              h-10 flex items-center justify-center rounded-lg text-sm
-              transition-colors relative
-              ${
-                // 현재 월의 날짜가 아닌 경우 흐리게 표시
-                !isSameMonth(day, currentDate)
-                  ? "text-gray-300"
-                  : "text-gray-800"
-              }
-              ${
-                // 오늘 날짜인 경우 특별한 스타일 적용
-                isToday(day)
-                  ? "bg-[#FFE8A3] text-gray-800 font-semibold"
-                  : "hover:bg-gray-100"
-              }
-            `}
+            flex-1 aspect-square flex items-center justify-center rounded-lg text-sm
+            transition-colors relative
+            ${
+              // 현재 월의 날짜가 아닌 경우 흐리게 표시
+              !isCurrentMonth ? "text-gray-300" : "text-gray-800"
+            }
+            ${
+              // 오늘 날짜인 경우 특별한 스타일 적용
+              isTodayDate
+                ? "bg-[#FFE8A3] text-gray-800 font-semibold"
+                : "hover:bg-[#FFF1C2]"
+            }
+          `}
           >
             {/* 날짜 숫자 표시 */}
-            {format(day, "d")}
+            {format(date, "d")}
 
             {/* 일기가 있는 경우 표시할 인디케이터 */}
             {hasEntry && (
@@ -67,8 +84,8 @@ export default function CalendarGrid({
               </div>
             )}
           </button>
-        );
-      })}
+        )
+      )}
     </div>
   );
 }
