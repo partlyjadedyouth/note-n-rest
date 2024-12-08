@@ -60,7 +60,7 @@ export default function HomePage() {
   return (
     <div className="min-h-screen p-4 relative">
       <div className="w-full h-full flex flex-col">
-        <div className="flex justify-between items-center mb-6 bg-white rounded-xl p-4 shadow-sm">
+        <div className="flex justify-between items-center mb-3 bg-white rounded-xl px-4 py-2 shadow-sm">
           <h1 className="text-m font-bold text-gray-800">
             안녕하세요, {userName}님!
           </h1>

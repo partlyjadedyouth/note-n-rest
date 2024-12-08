@@ -53,7 +53,7 @@
   }
 
   .header-container {
-    @apply flex justify-between items-center h-14 px-4 bg-[#FFFBEB] shadow-sm mb-4 relative;
+    @apply flex justify-between items-center h-14 px-4 bg-[#FFFBEB] shadow-sm mb-2 relative;
   }
 
   .back-button {

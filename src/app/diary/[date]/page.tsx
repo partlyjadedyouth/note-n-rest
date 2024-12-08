@@ -5,6 +5,8 @@ import { useRouter } from "next/navigation";
 import { use } from "react";
 import { DiaryEntry } from "@/types";
 import { handleClientError } from "@/utils/error-handler";
+import { format, addDays, subDays } from "date-fns";
+import DateHeader from "@/components/DateHeader";
 
 export default function DiaryPage({
   params,
@@ -68,6 +70,16 @@ export default function DiaryPage({
     }
   };
 
+  const handlePrevDate = () => {
+    const prevDate = format(subDays(new Date(date), 1), "yyyy-MM-dd");
+    router.push(`/diary/${prevDate}`);
+  };
+
+  const handleNextDate = () => {
+    const nextDate = format(addDays(new Date(date), 1), "yyyy-MM-dd");
+    router.push(`/diary/${nextDate}`);
+  };
+
   // 뒤로가기 처리
   const handleBack = () => {
     if (isEditing) {
@@ -84,6 +96,11 @@ export default function DiaryPage({
   if (loading) {
     return (
       <div className="min-h-screen bg-[#FFFBEB] p-4 flex items-center justify-center">
+        <DateHeader
+          date={date}
+          onPrevDate={handlePrevDate}
+          onNextDate={handleNextDate}
+        />
         <div className="text-gray-600">로딩 중...</div>
       </div>
     );
@@ -122,6 +139,11 @@ export default function DiaryPage({
           <div className="header-right" />
         </div>
         <div className="p-4">
+          <DateHeader
+            date={date}
+            onPrevDate={handlePrevDate}
+            onNextDate={handleNextDate}
+          />
           <div className="flex flex-col items-center justify-center min-h-[80vh]">
             <p className="text-gray-600">작성한 일기가 없습니다</p>
           </div>
@@ -168,6 +190,11 @@ export default function DiaryPage({
         )}
       </div>
       <div className="p-4">
+        <DateHeader
+          date={date}
+          onPrevDate={handlePrevDate}
+          onNextDate={handleNextDate}
+        />
         <div className="max-w-md mx-auto space-y-6">
           {/* 일기 내용 */}
           <div className="bg-white rounded-xl p-4 shadow-sm">
