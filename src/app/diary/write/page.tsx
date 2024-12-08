@@ -23,7 +23,7 @@ function WriteDiaryForm() {
         if (!response.ok) {
           const errorData = await response.json();
           throw new Error(
-            errorData.error || "일기 조회 중 오류가 발생했습니다.",
+            errorData.error || "일기 조회 중 오류가 발생했습니다."
           );
         }
         const data = await response.json();
@@ -94,12 +94,9 @@ function WriteDiaryForm() {
   }
 
   return (
-    <div className="min-h-screen bg-[#FFFBEB] p-4">
-      <div className="max-w-md mx-auto space-y-4">
-        <button
-          onClick={handleBack}
-          className="p-2 hover:bg-white rounded-lg transition-colors"
-        >
+    <div className="min-h-screen bg-[#FFFBEB]">
+      <div className="header-container relative">
+        <button onClick={handleBack} className="back-button">
           <svg
             className="w-6 h-6 text-gray-600"
             fill="none"
@@ -114,35 +111,40 @@ function WriteDiaryForm() {
             />
           </svg>
         </button>
+        <h1 className="header-title">NoRe: Note & Rest</h1>
+        <div className="header-right" />
+      </div>
+      <div className="p-4">
+        <div className="max-w-md mx-auto space-y-4">
+          {error && (
+            <div className="bg-red-50 border border-red-200 text-red-600 px-4 py-3 rounded-lg text-sm">
+              {error}
+            </div>
+          )}
 
-        {error && (
-          <div className="bg-red-50 border border-red-200 text-red-600 px-4 py-3 rounded-lg text-sm">
-            {error}
-          </div>
-        )}
+          <form onSubmit={handleSubmit} className="space-y-4">
+            <textarea
+              value={content}
+              onChange={(e) => setContent(e.target.value)}
+              placeholder="오늘의 이야기를 들려주세요..."
+              className="w-full h-[60vh] p-4 bg-white rounded-xl shadow-sm 
+                       border border-gray-200 focus:border-[#FFE8A3] 
+                       focus:ring-2 focus:ring-[#FFE8A3] focus:outline-none 
+                       transition-colors resize-none"
+              required
+            />
 
-        <form onSubmit={handleSubmit} className="space-y-4">
-          <textarea
-            value={content}
-            onChange={(e) => setContent(e.target.value)}
-            placeholder="오늘의 이야기를 들려주세요..."
-            className="w-full h-[60vh] p-4 bg-white rounded-xl shadow-sm 
-                     border border-gray-200 focus:border-[#FFE8A3] 
-                     focus:ring-2 focus:ring-[#FFE8A3] focus:outline-none 
-                     transition-colors resize-none"
-            required
-          />
-
-          <button
-            type="submit"
-            disabled={isSubmitting}
-            className="w-full py-3 px-4 bg-[#FFE8A3] hover:bg-[#FFE093] 
-                     text-gray-800 font-medium rounded-lg transition-colors 
-                     disabled:opacity-50 disabled:cursor-not-allowed"
-          >
-            {isSubmitting ? "저장 중..." : "완료"}
-          </button>
-        </form>
+            <button
+              type="submit"
+              disabled={isSubmitting}
+              className="w-full py-3 px-4 bg-[#FFE8A3] hover:bg-[#FFE093] 
+                       text-gray-800 font-medium rounded-lg transition-colors 
+                       disabled:opacity-50 disabled:cursor-not-allowed"
+            >
+              {isSubmitting ? "저장 중..." : "완료"}
+            </button>
+          </form>
+        </div>
       </div>
     </div>
   );
