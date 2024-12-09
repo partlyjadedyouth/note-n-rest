@@ -1,3 +1,70 @@
+@font-face {
+  font-family: "Cafe24SsurroundAir";
+  src: url("/fonts/Cafe24SsurroundAir-v1.1.woff2") format("woff2"),
+    url("/fonts/Cafe24SsurroundAir-v1.1.woff") format("woff");
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@layer base {
+  :root {
+    --color-primary: #ffe8a3;
+    --color-primary-hover: #ffe093;
+    --color-background: #fffbeb;
+    --color-text: #1c1b19;
+  }
+
+  html {
+    font-family: "Cafe24SsurroundAir", system-ui, sans-serif;
+    background-color: var(--color-background);
+    color: var(--color-text);
+  }
+
+  body {
+    font-family: "Cafe24SsurroundAir", system-ui, sans-serif;
+  }
+}
+
+@layer components {
+  .btn-primary {
+    @apply bg-[#FFE8A3] hover:bg-[#FFE093] text-[#1C1B19] 
+           transition-colors disabled:opacity-50 disabled:cursor-not-allowed;
+  }
+
+  .btn-floating {
+    @apply btn-primary w-16 h-16 rounded-full flex items-center justify-center shadow-lg;
+  }
+
+  .input-primary {
+    @apply w-full px-4 py-3 rounded-lg border border-gray-200 
+           focus:border-[#FFE8A3] focus:ring-2 focus:ring-[#FFE8A3] 
+           focus:outline-none transition-colors;
+  }
+
+  .textarea-primary {
+    @apply w-full p-4 bg-white rounded-xl shadow-sm border border-gray-200 
+           focus:border-[#FFE8A3] focus:ring-2 focus:ring-[#FFE8A3] 
+           focus:outline-none transition-colors resize-none;
+  }
+
+  .header-container {
+    @apply flex justify-between items-center h-14 px-4 bg-[#FFFBEB] shadow-sm mb-2 relative;
+  }
+
+  .back-button {
+    @apply w-10 h-10 flex items-center justify-center hover:bg-white/50 rounded-lg transition-colors;
+  }
+
+  .header-title {
+    @apply text-lg font-semibold text-gray-800 absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2;
+  }
+
+  .header-right {
+    @apply w-10;
+  }
+}

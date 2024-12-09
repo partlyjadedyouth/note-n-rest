@@ -14,7 +14,14 @@
 "use client";
 
 import { useState } from "react";
-import { startOfMonth, endOfMonth, eachDayOfInterval } from "date-fns";
+import {
+  startOfMonth,
+  // endOfMonth,
+  eachDayOfInterval,
+  startOfWeek,
+  endOfWeek,
+  addWeeks,
+} from "date-fns";
 import { CalendarProps } from "@/types";
 import CalendarHeader from "@/components/calendar/CalendarHeader";
 import CalendarWeekdays from "@/components/calendar/CalendarWeekdays";
@@ -26,9 +33,16 @@ export default function Calendar({ entries, onDateClick }: CalendarProps) {
 
   // 현재 월의 시작일과 마지막 일 계산
   const monthStart = startOfMonth(currentDate);
-  const monthEnd = endOfMonth(currentDate);
-  // 현재 월의 모든 날짜를 배열로 생성
-  const days = eachDayOfInterval({ start: monthStart, end: monthEnd });
+  // const monthEnd = endOfMonth(currentDate);
+
+  // 달력에 표시할 첫 주의 시작일과 마지막 주의 종료일 계산
+  const calendarStart = startOfWeek(monthStart, { weekStartsOn: 0 });
+  const calendarEnd = endOfWeek(addWeeks(calendarStart, 5), {
+    weekStartsOn: 0,
+  });
+
+  // 6주 분량의 날짜 배열 생성
+  const days = eachDayOfInterval({ start: calendarStart, end: calendarEnd });
 
   // 이전 월로 이동하는 핸들러
   const prevMonth = () => {
@@ -41,8 +55,7 @@ export default function Calendar({ entries, onDateClick }: CalendarProps) {
   };
 
   return (
-    // 캘린더 컨테이너 - 흰색 배경과 그림자 효과 적용
-    <div className="bg-white rounded-2xl shadow-md p-4">
+    <div className="h-[calc(100vh-180px)] flex flex-col">
       {/* 캘린더 헤더 - 년월 표시 및 월 이동 버튼 */}
       <CalendarHeader
         currentDate={currentDate}
