@@ -16,7 +16,7 @@
 import { useState } from "react";
 import {
   startOfMonth,
-  endOfMonth,
+  // endOfMonth,
   eachDayOfInterval,
   startOfWeek,
   endOfWeek,
@@ -33,7 +33,7 @@ export default function Calendar({ entries, onDateClick }: CalendarProps) {
 
   // 현재 월의 시작일과 마지막 일 계산
   const monthStart = startOfMonth(currentDate);
-  const monthEnd = endOfMonth(currentDate);
+  // const monthEnd = endOfMonth(currentDate);
 
   // 달력에 표시할 첫 주의 시작일과 마지막 주의 종료일 계산
   const calendarStart = startOfWeek(monthStart, { weekStartsOn: 0 });

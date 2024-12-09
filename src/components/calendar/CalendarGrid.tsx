@@ -15,7 +15,7 @@
 
 import {
   format,
-  isSameMonth,
+  // isSameMonth,
   isSameDay,
   isToday,
   parseISO,
@@ -84,7 +84,7 @@ export default function CalendarGrid({
               </div>
             )}
           </button>
-        )
+        ),
       )}
     </div>
   );
